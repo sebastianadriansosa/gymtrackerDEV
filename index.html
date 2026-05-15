@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GymTracker — Rutina de Musculación</title>
+<title>GymTracker (DEV) — Rutina de Musculación</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap');
@@ -324,30 +324,27 @@
 </head>
 <body>
 
-<!-- Loading -->
 <div id="loading-screen">
   <div class="spinner"></div>
-  <div class="loading-text">Cargando...</div>
+  <div class="loading-text">Cargando DEV...</div>
 </div>
 
-<!-- Login -->
 <div id="login-screen" style="display:none">
   <div class="login-box">
-    <div class="login-logo">GymTracker</div>
+    <div class="login-logo">GymTracker <span style="font-size: 24px; color: #ff4444;">DEV</span></div>
     <div class="login-sub">Rutina de Musculación</div>
-    <div class="login-tagline">Registrá tus cargas, seguí tu evolución y cumplí tus objetivos. Tus datos sincronizados en todos tus dispositivos.</div>
+    <div class="login-tagline">Entorno de Pruebas y Desarrollo. Registrá tus cargas de prueba de forma aislada.</div>
     <button class="google-btn" onclick="loginWithGoogle()">
       <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.6 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 2.9l5.7-5.7C34.2 6.5 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 19 12 24 12c3.1 0 5.8 1.1 7.9 2.9l5.7-5.7C34.2 6.5 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.7 35.8 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.2 5.2C37.3 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
       Continuar con Google
     </button>
-    <div class="login-footer">Tus datos se guardan de forma segura en la nube.<br>Solo vos podés ver tu información.</div>
+    <div class="login-footer">Conectado a Firebase Base de Datos DEV.</div>
   </div>
 </div>
 
-<!-- App -->
 <div id="app-screen">
   <header>
-    <div class="logo">GymTracker<span>Rutina de Musculación</span></div>
+    <div class="logo">GymTracker <span style="display:inline; font-size:12px; color:#ff4444; font-family:'DM Sans'; font-weight:bold;">[DEV]</span><span>Rutina de Musculación</span></div>
     <div class="header-right">
       <div class="header-stats">
         <div class="hstat"><div class="hstat-val" id="hs-week">1</div><div class="hstat-label">Semana</div></div>
@@ -420,13 +417,13 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, collection, g
 
 // ── FIREBASE CONFIG ──────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyDdZdKCcd5HUZlDpz3f1ajHydj9NOgIG-A",
-  authDomain: "gymtracker-519a4.firebaseapp.com",
-  projectId: "gymtracker-519a4",
-  storageBucket: "gymtracker-519a4.firebasestorage.app",
-  messagingSenderId: "346679729190",
-  appId: "1:346679729190:web:33ef2fd83fa59508e75ae7",
-  measurementId: "G-XKELRF493R"
+  apiKey: "AIzaSyBBnDju89oV6vq7R7TxisHEksaOcOq_4ls",
+  authDomain: "gymtracker-dev-b9bf9.firebaseapp.com",
+  projectId: "gymtracker-dev-b9bf9",
+  storageBucket: "gymtracker-dev-b9bf9.firebasestorage.app",
+  messagingSenderId: "690418104394",
+  appId: "1:690418104394:web:bacbc3ed6b4666b9598eb3",
+  measurementId: "G-YKVDKY2G4Z"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -558,13 +555,10 @@ async function persistData() {
 // ── DATA HELPERS ─────────────────────────────────
 function todayStr() { return new Date().toISOString().slice(0,10); }
 
-// Returns the real calendar date (YYYY-MM-DD) for a given day index in the current week
-// dayIndex: 0=Mon,1=Tue,2=Wed,3=Thu,4=Fri,5=Sat,6=Sun
 function dateForDayIndex(dayIndex) {
   const today = new Date();
   today.setHours(0,0,0,0);
-  const dow = today.getDay(); // 0=Sun,1=Mon,...6=Sat
-  // Monday of current week
+  const dow = today.getDay(); 
   const monday = new Date(today);
   monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
   const target = new Date(monday);
@@ -627,7 +621,6 @@ function completeEx(dayId, exId) {
   const key = exKey(dayId, exId);
   if (!userData.exDone.includes(key)) {
     userData.exDone.push(key);
-    // increment tasks counter via checkin-adjacent logic
     persistData();
   }
 }
@@ -639,29 +632,8 @@ function uncompleteEx(dayId, exId) {
   persistData();
 }
 
-function isExDone(dayId, exId) {
-  return (userData.exDone || []).includes(exKey(dayId, exId));
-}
-
-function countDoneExercises() {
-  if (!userData.exDone) return 0;
-  // Count unique exercise completions across all checked-in days
-  const checkins = userData.checkins || [];
-  const doneDates = new Set(checkins.map(c => c.substring(0,10)));
-  return userData.exDone.filter(k => {
-    const dateStr = k.substring(0,10);
-    return doneDates.has(dateStr);
-  }).length;
-}
-
-function formatDate(str) {
-  if (!str) return '';
-  const [y,m,d] = str.split('-');
-  return `${d}/${m}/${y}`;
-}
-
 // ── TIMER ENGINE ─────────────────────────────────
-const timerState = {}; // keyed by exId
+const timerState = {}; 
 
 window.getRestSeconds = function(restStr) {
   const m = restStr.match(/(\d+)/);
@@ -683,7 +655,6 @@ window.playBeep = function(duration = 0.15, freq = 880, vol = 0.4) {
 }
 
 window.playAlarm = function(type) {
-  // type: 'warning' | 'done' | 'over10' | 'over20' | 'over30+'
   if (type === 'warning') {
     playBeep(0.12, 1046, 0.3);
     setTimeout(() => playBeep(0.12, 1046, 0.3), 180);
@@ -709,19 +680,19 @@ window.fmtSecs = function(s) {
 }
 
 window.initTimer = function(exId, totalSeries, restSecs) {
-  if (timerState[exId]) return; // already exists
+  if (timerState[exId]) return; 
   timerState[exId] = {
     exId, dayId: '', totalSeries, restSecs,
-    phase: 'idle',      // idle | active | rest | over | done
+    phase: 'idle',      
     currentSeries: 1,
     seriesStart: null,
     restStart: null,
-    elapsed: 0,         // seconds of current active phase
+    elapsed: 0,         
     restElapsed: 0,
-    seriesLog: [],      // [{series, duration}]
-    restLog: [],        // [{between, duration, over}]
+    seriesLog: [],      
+    restLog: [],        
     intervalId: null,
-    overAlarmAt: 0,     // track last over-alarm second
+    overAlarmAt: 0,     
   };
 }
 
@@ -736,7 +707,6 @@ window.timerTick = function(exId) {
     t.restElapsed = Math.floor((now - t.restStart) / 1000);
     const remaining = t.restSecs - t.restElapsed;
 
-    // Alarm triggers
     if (remaining === 10 && !t._warned) { t._warned = true; playAlarm('warning'); }
     if (remaining === 0 && !t._donePlayed) { t._donePlayed = true; t.phase = 'over'; playAlarm('done'); t.overAlarmAt = 0; }
     if (t.phase === 'over') {
@@ -753,7 +723,6 @@ window.timerTick = function(exId) {
 }
 
 window.timerStart = function(exId) {
-  // Init timer from DOM data attributes if not yet initialized
   if (!timerState[exId]) {
     const wrap = document.getElementById('timer-widget-' + exId);
     if (!wrap) return;
@@ -778,10 +747,8 @@ window.timerStart = function(exId) {
 window.timerPause = function(exId) {
   const t = timerState[exId];
   if (!t || t.phase !== 'active') return;
-  // Save series duration
   const dur = Math.floor((Date.now() - t.seriesStart) / 1000);
   t.seriesLog.push({ series: t.currentSeries, duration: dur });
-  // Start rest countdown
   t.phase = 'rest';
   t.restStart = Date.now();
   t.restElapsed = 0;
@@ -794,7 +761,6 @@ window.timerPause = function(exId) {
 window.timerResume = function(exId) {
   const t = timerState[exId];
   if (!t || (t.phase !== 'rest' && t.phase !== 'over')) return;
-  // Save rest duration
   const restDur = Math.floor((Date.now() - t.restStart) / 1000);
   const over = Math.max(0, restDur - t.restSecs);
   t.restLog.push({ between: t.currentSeries, duration: restDur, over });
@@ -811,13 +777,11 @@ window.timerStop = function(exId, dayId) {
   const t = timerState[exId];
   if (!t) return;
   clearInterval(t.intervalId);
-  // If still active, save last series
   if (t.phase === 'active') {
     const dur = Math.floor((Date.now() - t.seriesStart) / 1000);
     t.seriesLog.push({ series: t.currentSeries, duration: dur });
   }
   t.phase = 'done';
-  // Persist timer log to userData
   if (!userData.timerLogs) userData.timerLogs = {};
   const dayIndex = DAYS.findIndex(d => d.id === dayId);
   const dateStr = dateForDayIndex(dayIndex);
@@ -839,7 +803,6 @@ window.renderTimerWidget = function(exId) {
   if (!t) return;
   const phase = t.phase;
 
-  // Clock
   const clockEl = document.getElementById('tclock-' + exId);
   const phaseEl = document.getElementById('tphase-' + exId);
   const btnsEl  = document.getElementById('tbtns-'  + exId);
@@ -866,7 +829,6 @@ window.renderTimerWidget = function(exId) {
   clockEl.textContent = clockVal;
   if (phaseEl) phaseEl.textContent = phaseLabel;
 
-  // Dots
   if (dotsEl) {
     dotsEl.innerHTML = '';
     for (let i = 1; i <= t.totalSeries; i++) {
@@ -877,7 +839,6 @@ window.renderTimerWidget = function(exId) {
     }
   }
 
-  // Buttons
   if (btnsEl) {
     btnsEl.innerHTML = '';
     var eId = exId, dId = t.dayId;
@@ -912,7 +873,6 @@ window.renderTimerWidget = function(exId) {
     }
   }
 
-  // Mini history
   if (histEl && t.seriesLog.length > 0) {
     let h = '<div class="timer-history-mini">';
     t.seriesLog.forEach(function(s) {
@@ -928,7 +888,6 @@ window.renderTimerWidget = function(exId) {
   }
 }
 
-// Stop all timers when switching day
 const _origSwitchDay = window.switchDay;
 window.switchDay = (i) => {
   Object.keys(timerState).forEach(k => {
@@ -1011,7 +970,6 @@ function renderDay() {
             <div class="timer-btns" id="tbtns-${ex.id}"><button class="tbtn tbtn-start" onclick="timerStart('${ex.id}')">&#9658; Iniciar serie</button></div>
             <div id="thist-${ex.id}"></div>
           </div>
-                    </div>
           <div class="weight-label">Registrar peso cargado</div>
           <div class="weight-input-row">
             <input class="weight-input" type="number" id="w-${ex.id}" placeholder="${last!==null?last:'0'}" min="0" step="0.5" value="${last!==null?last:''}">
@@ -1050,11 +1008,9 @@ window.saveEx = (exId) => {
   saveWeight(exId, kg);
   updateHeaderStats();
 
-  // Update badge
   const badge = document.querySelector('[data-badge="' + exId + '"]');
   if (badge) badge.textContent = kg + ' kg';
 
-  // Flash save button green
   const btn = document.getElementById('savebtn-' + exId);
   if (btn) {
     btn.textContent = '✓ Guardado';
@@ -1067,7 +1023,6 @@ window.saveEx = (exId) => {
     }, 1500);
   }
 
-  // Refresh history list
   const histEl = document.getElementById('hist-' + exId);
   if (histEl) {
     const history = getWeights(exId);
@@ -1090,6 +1045,7 @@ window.saveEx = (exId) => {
     }
   }
 };
+
 window.doCheckIn = (dayId) => {
   checkInDay(dayId);
   renderDay();
@@ -1116,25 +1072,38 @@ window.doUncompleteEx = (dayId, exId) => {
   updateHeaderStats();
 };
 
+function isExDone(dayId, exId) {
+  return (userData.exDone || []).includes(exKey(dayId, exId));
+}
+
+function countDoneExercises() {
+  if (!userData.exDone) return 0;
+  const checkins = userData.checkins || [];
+  const doneDates = new Set(checkins.map(c => c.substring(0,10)));
+  return userData.exDone.filter(k => {
+    const dateStr = k.substring(0,10);
+    return doneDates.has(dateStr);
+  }).length;
+}
+
+function formatDate(str) {
+  if (!str) return '';
+  const [y,m,d] = str.split('-');
+  return `${d}/${m}/${y}`;
+}
+
 // ── HEADER STATS ─────────────────────────────────
 function updateHeaderStats() {
   const checkins = userData.checkins || [];
-  const weights  = userData.weights  || {};
-
-  // checkin format: "YYYY-MM-DD-dayid"
-  // Build set of ALL unique dates that have a checkin (past or present)
   const doneDates = new Set();
   checkins.forEach(c => {
-    // c could be "2025-05-11-lunes" -> take first 10 chars
     const dateStr = c.substring(0, 10);
-    // validate it looks like a date
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) doneDates.add(dateStr);
   });
 
   const today = new Date();
   today.setHours(0,0,0,0);
 
-  // ── Semana: calendar week number since first ever checkin ──
   let weekNum = 1;
   if (doneDates.size > 0) {
     const sorted = Array.from(doneDates).sort();
@@ -1150,26 +1119,19 @@ function updateHeaderStats() {
     weekNum = Math.floor((currentMonday - firstMonday) / (7*24*60*60*1000)) + 1;
   }
 
-  // ── Día: count of unique dates with checkin ──
   const totalDays = doneDates.size;
-
-  // ── Tareas: exercises explicitly marked as done on checked-in days ──
   const tasksTotal = countDoneExercises();
 
-  // ── Racha: consecutive days going back from today ──
-  // Skip today if not yet checked in (don't break streak)
-  // Skip Thursdays (rest day, never breaks streak)
   let streak = 0;
   const check = new Date(today);
   check.setHours(0,0,0,0);
   for (let i = 0; i < 365; i++) {
     const ds = check.toISOString().slice(0,10);
-    const dw = check.getDay(); // 0=Sun,1=Mon...4=Thu
+    const dw = check.getDay(); 
     const isThursday = dw === 4;
     const isTrained = doneDates.has(ds);
 
     if (i === 0 && !isTrained && !isThursday) {
-      // today not trained yet — skip without breaking
       check.setDate(check.getDate() - 1);
       continue;
     }
