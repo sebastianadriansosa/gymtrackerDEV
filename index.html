@@ -880,14 +880,35 @@ window.renderTimerWidget = function(exId) {
   // Buttons
   if (btnsEl) {
     btnsEl.innerHTML = '';
+    var eId = exId, dId = t.dayId;
     if (phase === 'idle') {
-      btnsEl.innerHTML = '<button class="tbtn tbtn-start" onclick="timerStart('' + exId + '')">&#9658; Iniciar serie</button>';
+      var b = document.createElement('button');
+      b.className = 'tbtn tbtn-start';
+      b.innerHTML = '&#9658; Iniciar serie';
+      b.addEventListener('click', function(){ timerStart(eId); });
+      btnsEl.appendChild(b);
     } else if (phase === 'active') {
-      btnsEl.innerHTML = '<button class="tbtn tbtn-pause" onclick="timerPause('' + exId + '')">&#9616;&#9616; Pausa / Descanso</button>'
-        + '<button class="tbtn tbtn-stop" onclick="timerStop('' + exId + '','' + t.dayId + '')">&#9632; Terminar</button>';
+      var b1 = document.createElement('button');
+      b1.className = 'tbtn tbtn-pause';
+      b1.innerHTML = '&#9616;&#9616; Pausa / Descanso';
+      b1.addEventListener('click', function(){ timerPause(eId); });
+      var b2 = document.createElement('button');
+      b2.className = 'tbtn tbtn-stop';
+      b2.innerHTML = '&#9632; Terminar';
+      b2.addEventListener('click', function(){ timerStop(eId, dId); });
+      btnsEl.appendChild(b1);
+      btnsEl.appendChild(b2);
     } else if (phase === 'rest' || phase === 'over') {
-      btnsEl.innerHTML = '<button class="tbtn tbtn-resume" onclick="timerResume('' + exId + '')">&#9658; Siguiente serie</button>'
-        + '<button class="tbtn tbtn-stop" onclick="timerStop('' + exId + '','' + t.dayId + '')">&#9632; Terminar</button>';
+      var b1 = document.createElement('button');
+      b1.className = 'tbtn tbtn-resume';
+      b1.innerHTML = '&#9658; Siguiente serie';
+      b1.addEventListener('click', function(){ timerResume(eId); });
+      var b2 = document.createElement('button');
+      b2.className = 'tbtn tbtn-stop';
+      b2.innerHTML = '&#9632; Terminar';
+      b2.addEventListener('click', function(){ timerStop(eId, dId); });
+      btnsEl.appendChild(b1);
+      btnsEl.appendChild(b2);
     }
   }
 
