@@ -1046,39 +1046,50 @@ window.toggleEx = (id) => {
 
 window.saveEx = (exId) => {
   const kg = parseFloat(document.getElementById('w-'+exId).value);
-  if (isNaN(kg)||kg<0) return;
+  if (isNaN(kg) || kg < 0) return;
   saveWeight(exId, kg);
   updateHeaderStats();
-  // Update badge without closing the card
+
+  // Update badge
   const badge = document.querySelector('[data-badge="' + exId + '"]');
   if (badge) badge.textContent = kg + ' kg';
-  // Flash save button
+
+  // Flash save button green
   const btn = document.getElementById('savebtn-' + exId);
   if (btn) {
-    const orig = btn.textContent;
     btn.textContent = '✓ Guardado';
     btn.style.background = '#4CAF50';
     btn.style.color = '#000';
-    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
+    setTimeout(function() {
+      btn.textContent = 'Guardar';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 1500);
   }
-  // Refresh history list inside the card
+
+  // Refresh history list
   const histEl = document.getElementById('hist-' + exId);
   if (histEl) {
     const history = getWeights(exId);
-    histEl.innerHTML = history.slice().reverse().slice(0,6).map(function(h,idx,arr) {
-      const prev = arr[idx+1];
-      let diff = '';
-      if (prev) {
-        const dv = parseFloat((h.kg - prev.kg).toFixed(1));
-        if (dv > 0) diff = '<span class="history-diff diff-up">▲ +' + dv + '</span>';
-        else if (dv < 0) diff = '<span class="history-diff diff-down">▼ ' + dv + '</span>';
-        else diff = '<span class="history-diff diff-same">= igual</span>';
+    if (history.length > 0) {
+      var html = '';
+      var rev = history.slice().reverse().slice(0, 6);
+      for (var i = 0; i < rev.length; i++) {
+        var h = rev[i];
+        var prev = rev[i+1];
+        var diff = '';
+        if (prev) {
+          var dv = parseFloat((h.kg - prev.kg).toFixed(1));
+          if (dv > 0) diff = '<span class="history-diff diff-up">&#9650; +' + dv + '</span>';
+          else if (dv < 0) diff = '<span class="history-diff diff-down">&#9660; ' + dv + '</span>';
+          else diff = '<span class="history-diff diff-same">= igual</span>';
+        }
+        html += '<div class="history-item"><span class="history-date">' + formatDate(h.date) + '</span><span><span class="history-val">' + h.kg + ' kg</span>' + diff + '</span></div>';
       }
-      return '<div class="history-item"><span class="history-date">' + formatDate(h.date) + '</span><span><span class="history-val">' + h.kg + ' kg</span>' + diff + '</span></div>';
-    }).join('');
+      histEl.innerHTML = html;
+    }
   }
 };
-
 window.doCheckIn = (dayId) => {
   checkInDay(dayId);
   renderDay();
